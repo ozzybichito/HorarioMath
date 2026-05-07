@@ -147,7 +147,13 @@
         .edit-icon { flex-shrink: 0; color: var(--text-muted); font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--card-border);}
         
         .receso { text-align: center; font-size: 0.7rem; font-weight: 500; color: var(--text-muted); padding: 8px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; background: rgba(0,0,0,0.2); flex-shrink: 0; letter-spacing: 1px;}
-        .note-dot { width: 6px; height: 6px; background: var(--accent-alt); border-radius: 50%; position: absolute; top: 10px; right: 10px; }
+        
+        /* LUCES LED PARA NOTAS */
+        .note-dot { 
+            width: 6px; height: 6px; background: var(--accent-alt); border-radius: 50%; 
+            position: absolute; top: 10px; right: 10px; 
+            box-shadow: 0 0 5px var(--accent-alt), 0 0 8px var(--accent-alt); 
+        }
 
         .live-started { border: 1px solid var(--accent-alt) !important; border-left: 4px solid var(--accent-alt) !important; background: rgba(247, 127, 0, 0.05) !important; }
         .live-progress { border: 1px solid var(--accent-green) !important; border-left: 4px solid var(--accent-green) !important; background: rgba(42, 157, 143, 0.05) !important; }
@@ -178,10 +184,17 @@
         .btn-level.active { background: var(--accent-main); color: #000; font-weight: 700; border-color: var(--accent-main); }
 
         .grid-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; margin-bottom: 20px; }
-        .day-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 0.85rem; border: 1px solid transparent; background: rgba(255,255,255,0.02);}
+        .day-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 0.85rem; border: 1px solid transparent; background: rgba(255,255,255,0.02); position: relative;}
         .day-cell.active { background: rgba(230, 57, 70, 0.15); color: var(--accent-main); font-weight: 600; border: 1px solid var(--border); }
         body.pro-mode .day-cell.active { background: rgba(255, 215, 0, 0.15); }
         
+        /* LUZ LED PARA CALENDARIO */
+        .day-cell.has-notes::after { 
+            content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); 
+            width: 5px; height: 5px; background: var(--accent-alt); border-radius: 50%; 
+            box-shadow: 0 0 5px var(--accent-alt), 0 0 8px var(--accent-alt); 
+        }
+
         /* Modificado para que el Toast se ajuste bien al contenido largo */
         .toast { position: fixed; top: 20px; left: 50%; transform: translate(-50%, -120%); background: #141414; border: 1px solid var(--card-border); color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 0.85rem; font-family: var(--font-ui); transition: transform 0.4s; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 90%; max-width: 400px; text-align: center; line-height: 1.4;}
         .toast.show { transform: translate(-50%, 0); }
@@ -195,6 +208,11 @@
         .btn-delete { background: transparent; color: var(--text-main); border: 1px solid var(--card-border); }
         
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+        /* VIP Mode LEDs */
+        body.pro-mode .note-dot, body.pro-mode .day-cell.has-notes::after {
+            background: var(--accent-main); box-shadow: 0 0 5px var(--accent-main), 0 0 8px var(--accent-main);
+        }
     </style>
 </head>
 <body>
@@ -312,7 +330,7 @@
         <div class="modal-title-header">Información del Sistema <button class="close-modal-btn" onclick="forceCloseModal('credits-modal')">✕</button></div>
         <div style="text-align: center; padding: 10px 0;">
             <div style="font-family: var(--font-math); font-weight: 700; font-size: 1.4rem; margin-bottom: 5px; color: var(--text-main); letter-spacing: 1px;">JASON DAFNIS</div>
-            <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Desarrollo & Diseño UX/UI</div>
+            <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Creador y Desarrollador</div>
             <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); padding: 18px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
                 Especialidad Matemática II<br>
                 <span style="color: var(--text-main); font-weight: 500;">Escuela de Educación Superior Pedagógica Pública Juliaca</span><br>
