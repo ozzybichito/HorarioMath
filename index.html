@@ -204,7 +204,7 @@
         <div id="btn-secret-pi" class="secret-pi-btn">π</div>
         
         <h1>PROTOCOLO DE ACCESO</h1>
-        <div id="challenge-display" class="challenge-text">Generando Ecuación...</div>
+        <div id="challenge-display" class="challenge-text">Generando Reto...</div>
         <input type="text" class="safe-display" id="intro-display" value="" placeholder="?" readonly>
         
         <div class="safe-grid">
@@ -337,7 +337,7 @@
 
 <script>
     /* =========================================
-       0. GENERADOR DINÁMICO DE RETOS MATEMÁTICOS
+       0. GENERADOR DINÁMICO DE RETOS MATEMÁTICOS (MENTAL/ÁLGEBRA)
        ========================================= */
     let currentChallenge = { q: "", a: "" };
 
@@ -347,21 +347,22 @@
         let q = "", a = "";
         
         if (type === 0) {
-            // Aritmética Jerárquica
-            let a1 = Math.floor(Math.random() * 8) + 2; // 2 al 9
+            // Aritmética Mixta Mental Rápida
+            let a1 = Math.floor(Math.random() * 8) + 2; 
             let b1 = Math.floor(Math.random() * 8) + 2; 
-            let c1 = Math.floor(Math.random() * 15) + 1;
+            let c1 = Math.floor(Math.random() * 20) + 5; 
             if (Math.random() > 0.5) {
-                q = `Resolver: ${a1} × ${b1} - ${c1}`;
-                a = (a1 * b1 - c1).toString();
+                q = `Resolver: ${a1} × ${b1} + ${c1}`;
+                a = (a1 * b1 + c1).toString();
             } else {
-                q = `Resolver: ${c1} + ${a1} × ${b1}`;
-                a = (c1 + a1 * b1).toString();
+                let sum = a1 * b1 + c1;
+                q = `Resolver: ${sum} - ${a1} × ${b1}`;
+                a = c1.toString();
             }
         } else if (type === 1) {
             // Raíces y Potencias
-            const roots = [{n:9,r:3}, {n:16,r:4}, {n:25,r:5}, {n:36,r:6}, {n:49,r:7}, {n:64,r:8}, {n:81,r:9}, {n:100,r:10}, {n:121,r:11}];
-            const powers = [{b:2,e:2,v:4}, {b:2,e:3,v:8}, {b:3,e:2,v:9}, {b:4,e:2,v:16}, {b:5,e:2,v:25}];
+            const roots = [{n:16,r:4}, {n:25,r:5}, {n:36,r:6}, {n:49,r:7}, {n:64,r:8}, {n:81,r:9}, {n:100,r:10}];
+            const powers = [{b:2,e:3,v:8}, {b:3,e:2,v:9}, {b:4,e:2,v:16}, {b:5,e:2,v:25}, {b:6,e:2,v:36}];
             let root = roots[Math.floor(Math.random()*roots.length)];
             let power = powers[Math.floor(Math.random()*powers.length)];
             
@@ -369,59 +370,61 @@
                 q = `Calcular: √${root.n} + ${power.b}${power.e === 2 ? '²' : '³'}`;
                 a = (root.r + power.v).toString();
             } else {
-                q = `Calcular: ${power.b}${power.e === 2 ? '²' : '³'} - √${root.n}`;
-                a = (power.v - root.r).toString();
+                let max = Math.max(root.r, power.v);
+                let min = Math.min(root.r, power.v);
+                q = `Calcular: ${power.v === max ? `${power.b}${power.e === 2 ? '²' : '³'} - √${root.n}` : `√${root.n} - ${power.b}${power.e === 2 ? '²' : '³'}`}`;
+                a = (max - min).toString();
             }
         } else if (type === 2) {
-            // Factoriales exactos
-            const facts = [{n:3,v:6}, {n:4,v:24}, {n:5,v:120}];
-            let fact = facts[Math.floor(Math.random()*facts.length)];
-            // Aseguramos que la división sea exacta
-            let validDivisors = [2, 3, 4, 5, 6, 8, 10, 12, 20].filter(d => fact.v % d === 0);
-            let div = validDivisors[Math.floor(Math.random()*validDivisors.length)];
+            // Ecuaciones Lineales Básicas (Hallar "x")
+            let coef = Math.floor(Math.random() * 5) + 2; // 2 a 6
+            let xVal = Math.floor(Math.random() * 8) + 3; // 3 a 10
+            let bVal = Math.floor(Math.random() * 15) + 1; // 1 a 15
             
             if (Math.random() > 0.5) {
-                let mult = Math.floor(Math.random() * 3) + 2;
-                q = `Resolver: ${fact.n}! × ${mult}`;
-                a = (fact.v * mult).toString();
+                let cVal = coef * xVal + bVal;
+                q = `Hallar "x": ${coef}x + ${bVal} = ${cVal}`;
             } else {
+                let cVal = coef * xVal - bVal;
+                q = `Hallar "x": ${coef}x - ${bVal} = ${cVal}`;
+            }
+            a = xVal.toString();
+        } else if (type === 3) {
+            // Sistemas de ecuaciones mentales simples
+            let xVal = Math.floor(Math.random() * 15) + 10; // 10 a 24
+            let yVal = Math.floor(Math.random() * 8) + 2;   // 2 a 9
+            let suma = xVal + yVal;
+            let resta = xVal - yVal;
+            
+            q = `x+y=${suma}, x-y=${resta}. Halla "x"`;
+            a = xVal.toString();
+        } else if (type === 4) {
+            // Porcentajes rápidos
+            const percents = [10, 20, 25, 50];
+            const bases = [40, 60, 80, 120, 160, 200];
+            let p = percents[Math.floor(Math.random() * percents.length)];
+            let base = bases[Math.floor(Math.random() * bases.length)];
+            
+            q = `Calcular: ${p}% de ${base}`;
+            a = ((p * base) / 100).toString();
+        } else {
+            // Logaritmos básicos o Factoriales sencillos
+            if (Math.random() > 0.5) {
+                const logs = [
+                    {q:"log₂(8)", a:3}, {q:"log₂(16)", a:4}, {q:"log₂(32)", a:5},
+                    {q:"log₃(9)", a:2}, {q:"log₃(27)", a:3}, {q:"log₁₀(100)", a:2}
+                ];
+                let log = logs[Math.floor(Math.random()*logs.length)];
+                let extra = Math.floor(Math.random() * 15) + 5;
+                q = `Resolver: ${log.q} + ${extra}`;
+                a = (log.a + extra).toString();
+            } else {
+                const facts = [{n:4,v:24}, {n:5,v:120}];
+                let fact = facts[Math.floor(Math.random()*facts.length)];
+                let div = (fact.n === 4) ? [2,3,4,6,8,12][Math.floor(Math.random()*6)] : [2,3,4,5,6,10,12][Math.floor(Math.random()*7)];
                 q = `Resolver: ${fact.n}! ÷ ${div}`;
                 a = (fact.v / div).toString();
             }
-        } else if (type === 3) {
-            // Logaritmos
-            const logs = [
-                {q:"log₂(8)", a:3}, {q:"log₂(16)", a:4}, {q:"log₂(32)", a:5},
-                {q:"log₃(9)", a:2}, {q:"log₃(27)", a:3}, {q:"log₁₀(100)", a:2}
-            ];
-            let log = logs[Math.floor(Math.random()*logs.length)];
-            let extra = Math.floor(Math.random() * 10) + 1; 
-            
-            if (Math.random() > 0.5) {
-                q = `Calcular: ${log.q} + ${extra}`;
-                a = (log.a + extra).toString();
-            } else {
-                q = `Calcular: ${log.q} × ${extra}`;
-                a = (log.a * extra).toString();
-            }
-        } else if (type === 4) {
-            // Derivadas simples
-            let coef = Math.floor(Math.random() * 4) + 2; 
-            let exp = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
-            let xVal = Math.floor(Math.random() * 2) + 1; 
-            let expStr = exp === 2 ? '²' : exp === 3 ? '³' : '⁴';
-            
-            q = `d/dx(${coef}x${expStr}) en x=${xVal}`;
-            a = (coef * exp * Math.pow(xVal, exp - 1)).toString();
-        } else {
-            // Integrales Definidas simples (0 a A de Bx dx)
-            let B = Math.floor(Math.random() * 4) + 1; 
-            let A = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
-            // Formula: (B * A^2) / 2. Aseguramos que sea entero
-            if ((B * Math.pow(A, 2)) % 2 !== 0) B++; 
-            
-            q = `∫(0 a ${A}) ${B === 1 ? '' : B}x dx`;
-            a = ((B * Math.pow(A, 2)) / 2).toString();
         }
         
         currentChallenge = { q, a };
